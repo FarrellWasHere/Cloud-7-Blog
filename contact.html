@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact – Cloud 7</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f7fc;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        nav {
+            background: #6c5ce7;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        nav a {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .page-section {
+            max-width: 900px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+        h1, h2 {
+            color: #6c5ce7;
+        }
+        .contact-methods, .faq, .partners {
+            margin-bottom: 30px;
+        }
+        .contact-card {
+            background: #ffe0e0;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        button {
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #341f97;
+        }
+        .section-title {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">Cloud 7</div>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="mood.html">Mood</a>
+        <a href="journal.html">Journal</a>
+        <a href="book.html">Book</a>
+        <a href="resources.html">Resources</a>
+        <a href="contact.html">Support</a>
+        <a href="login.html">Login</a>
+    </div>
+</nav>
+
+<div class="page-section">
+    <h1>Get in Touch</h1>
+    <p>We're here to support you. Reach out with any questions, concerns, or feedback.</p>
+
+    <div class="contact-methods">
+        <h2 class="section-title">Call Us</h2>
+        <div class="contact-card">
+            <p>+44 20 1234 5678</p>
+            <p>Mon-Fri, 9am-5pm GMT</p>
+        </div>
+
+        <h2 class="section-title">Email Us</h2>
+        <div class="contact-card">
+            <p>support@cloud7wellness.com</p>
+            <p>We'll respond within 24 hours</p>
+        </div>
+
+        <h2 class="section-title">Live Chat</h2>
+        <div class="contact-card">
+            <p>Available on platform</p>
+            <p>Instant support for members</p>
+        </div>
+
+        <h2 class="section-title">Visit Us</h2>
+        <div class="contact-card">
+            <p>123 Wellness Street, London</p>
+            <p>By appointment only</p>
+        </div>
+    </div>
+
+    <div class="contact-form">
+        <h2 class="section-title">Send Us a Message</h2>
+        <form>
+            <label for="name">Your Name</label>
+            <input type="text" id="name" placeholder="John Doe">
+
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="john@example.com">
+
+            <label for="inquiry">Inquiry Type</label>
+            <select id="inquiry">
+                <option>General Question</option>
+                <option>Technical Issue</option>
+                <option>Feedback</option>
+            </select>
+
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" placeholder="How can we help you?">
+
+            <label for="message">Message</label>
+            <textarea id="message" rows="5" placeholder="Tell us more about your inquiry..."></textarea>
+
+            <button type="submit">Send Message</button>
+        </form>
+    </div>
+
+    <div class="support-hours">
+        <h2 class="section-title">Support Hours</h2>
+        <div class="contact-card">
+            <p>Monday - Friday: 9am - 5pm</p>
+            <p>Saturday: 10am - 2pm</p>
+            <p>Sunday: Closed</p>
+            <p>Crisis support available 24/7</p>
+        </div>
+    </div>
+
+    <div class="crisis-support">
+        <h2 class="section-title">Need Immediate Help?</h2>
+        <div class="contact-card">
+            <p>Crisis Helpline: <a href="https://suicidepreventionlifeline.org/" target="_blank">988</a> (24/7)</p>
+            <p>Crisis Text Line: Text 'HELLO' to 741741</p>
+        </div>
+    </div>
+
+    <div class="faq">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="contact-card">
+            <p><strong>How do I book my first session?</strong><br>
+            Visit our 'Book a Session' page and select your preferred therapist type, date, and format (online or in-person).</p>
+
+            <p><strong>Is my data secure and confidential?</strong><br>
+            Yes! All your data is encrypted and stored securely. We follow strict GDPR compliance and never share your information.</p>
+
+            <p><strong>What subscription plan should I choose?</strong><br>
+            Start with our Free plan to explore. Basic or Premium plans offer more sessions.</p>
+
+            <p><strong>Can I remain anonymous?</strong><br>
+            Yes, we offer anonymous session options. Your privacy and comfort are our top priorities.</p>
+        </div>
+    </div>
+
+    <div class="partners">
+        <h2 class="section-title">Partnering with Leading Organizations</h2>
+        <div class="contact-card">
+            <p>NHS</p>
+            <p>Schools & Universities</p>
+            <p>Employers</p>
+            <p>Licensed Professionals</p>
+        </div>
+    </div>
+</div>
+
+<footer style="text-align:center; padding:20px; background:#f0e6ff;">© 2025 Cloud 7</footer>
+
+</body>
+</html>

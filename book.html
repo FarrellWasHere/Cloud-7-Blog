@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Session – Cloud 7</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(to bottom right, #f3e8ff, #d0f0f0, #ffe6e0);
+        color: #333;
+    }
+
+    nav {
+        background: #6c5ce7;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+    }
+    nav a {
+        color: white;
+        margin-left: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    nav a:hover { text-decoration: underline; }
+
+    .container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #6c5ce7;
+        margin-bottom: 10px;
+    }
+
+    .stats {
+        display: flex;
+        justify-content: space-between;
+        text-align: center;
+        margin: 30px 0;
+    }
+
+    .stat-box {
+        flex: 1;
+        background: #f8f5ff;
+        margin: 10px;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+    }
+
+    .stat-box h2 {
+        color: #a29bfe;
+        font-size: 2rem;
+        margin: 0;
+    }
+
+    .stat-box p {
+        margin: 5px 0 0 0;
+        font-size: 1rem;
+        color: #555;
+    }
+
+    .no-sessions {
+        text-align: center;
+        margin: 30px 0;
+        font-size: 1.2rem;
+        color: #777;
+    }
+
+    button.book-btn {
+        display: block;
+        margin: 0 auto;
+        padding: 15px 30px;
+        background: #55efc4;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button.book-btn:hover {
+        background: #00b894;
+    }
+
+    /* Form Popup */
+    #bookingFormContainer {
+        display: none;
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 90%;
+        max-width: 400px;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+    }
+
+    label {
+        display: block;
+        margin: 10px 0 5px;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    .close-btn {
+        background: #ff7675;
+        color: white;
+        border: none;
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+    <div class="logo"><strong>Cloud 7</strong></div>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="mood.html">Mood</a>
+        <a href="journal.html">Journal</a>
+        <a href="book.html">Book</a>
+        <a href="resources.html">Resources</a>
+        <a href="contact.html">Support</a>
+        <a href="login.html">Login</a>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>Book a Session</h1>
+    <p style="text-align:center; color:#555;">Connect with licensed mental health professionals</p>
+
+    <!-- Stats -->
+    <div class="stats">
+        <div class="stat-box">
+            <h2 id="totalSessions">0</h2>
+            <p>Total Sessions</p>
+        </div>
+
+        <div class="stat-box">
+            <h2 id="upcomingSessions">0</h2>
+            <p>Upcoming</p>
+        </div>
+
+        <div class="stat-box">
+            <h2 id="completedSessions">0</h2>
+            <p>Completed</p>
+        </div>
+    </div>
+
+    <!-- No sessions text -->
+    <p class="no-sessions" id="noSessionsText">No appointments yet<br>Schedule your first session to get started</p>
+
+    <button class="book-btn" onclick="openBookingForm()">+ New Appointment</button>
+</div>
+
+<!-- Booking Form Popup -->
+<div id="bookingFormContainer">
+    <h2 style="text-align:center; color:#6c5ce7;">Book Your Session</h2>
+
+    <label>Date</label>
+    <input type="date" id="sessionDate">
+
+    <label>Session Type</label>
+    <select id="sessionType">
+        <option value="Online">Online</option>
+        <option value="In-Person">In-Person</option>
+    </select>
+
+    <button class="book-btn" onclick="saveSession()">Save Session</button>
+    <button class="close-btn" onclick="closeBookingForm()">Cancel</button>
+</div>
+
+<script>
+function openBookingForm() {
+    document.getElementById("bookingFormContainer").style.display = "block";
+}
+function closeBookingForm() {
+    document.getElementById("bookingFormContainer").style.display = "none";
+}
+
+// Load session stats
+function loadSessionStats() {
+    let sessions = JSON.parse(localStorage.getItem("cloud7Sessions")) || [];
+
+    document.getElementById("totalSessions").innerText = sessions.length;
+
+    const today = new Date().toISOString().split("T")[0];
+    const upcoming = sessions.filter(s => s.date >= today).length;
+    const completed = sessions.filter(s => s.date < today).length;
+
+    document.getElementById("upcomingSessions").innerText = upcoming;
+    document.getElementById("completedSessions").innerText = completed;
+
+    document.getElementById("noSessionsText").style.display = sessions.length === 0 ? "block" : "none";
+}
+
+// Save Session
+function saveSession() {
+    const date = document.getElementById("sessionDate").value;
+    const type = document.getElementById("sessionType").value;
+
+    if (!date) {
+        alert("Please select a date.");
+        return;
+    }
+
+    let sessions = JSON.parse(localStorage.getItem("cloud7Sessions")) || [];
+
+    sessions.push({
+        date: date,
+        type: type
+    });
+
+    localStorage.setItem("cloud7Sessions", JSON.stringify(sessions));
+
+    // Update account stats used by homepage
+    let userData = JSON.parse(localStorage.getItem("cloud7UserData")) || {
+        mood: "😊",
+        moodText: "Feeling Good",
+        weekProgress: 0,
+        journalEntries: 0,
+        sessionsBooked: 0
+    };
+    userData.sessionsBooked += 1;
+    localStorage.setItem("cloud7UserData", JSON.stringify(userData));
+
+    alert("Session booked successfully!");
+
+    closeBookingForm();
+    loadSessionStats();
+}
+
+loadSessionStats();
+</script>
+
+</body>
+</html>

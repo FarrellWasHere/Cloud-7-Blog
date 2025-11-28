@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mood Tracking – Cloud 7</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom right, #f3e8ff, #d0f0f0, #ffe6e0);
+        margin: 0;
+        padding: 0;
+    }
+
+    nav {
+        background: #6c5ce7;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+    }
+    nav a {
+        color: white;
+        margin-left: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #6c5ce7;
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        font-size: 1.2rem;
+        color: #555;
+        margin-top: 20px;
+        font-weight: bold;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+    }
+
+    textarea { height: 120px; }
+
+    .slider-value {
+        font-weight: bold;
+        margin-left: 10px;
+    }
+
+    button {
+        background: #55efc4;
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 10px;
+        width: 100%;
+        font-size: 1.1rem;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+    button:hover { background: #00b894; }
+
+    .stats-box {
+        background: #f8f5ff;
+        padding: 20px;
+        border-radius: 12px;
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    .stats-top {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .stat {
+        flex: 1;
+        background: #fff;
+        margin: 10px;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+    }
+
+    .stat h2 {
+        color: #a29bfe;
+        font-size: 2rem;
+        margin-bottom: 5px;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+    <div><strong>Cloud 7</strong></div>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="mood.html">Mood</a>
+        <a href="journal.html">Journal</a>
+        <a href="book.html">Book</a>
+        <a href="resources.html">Resources</a>
+        <a href="contact.html">Support</a>
+        <a href="login.html">Login</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <h1>How Are You Feeling Today?</h1>
+
+    <label class="section-title">Date</label>
+    <input type="date" id="moodDate" value="">
+
+
+    <label class="section-title">Overall Mood</label>
+    <select id="overallMood">
+        <option value="😊 Happy">😊 Happy</option>
+        <option value="🙂 Content">🙂 Content</option>
+        <option value="😐 Okay">😐 Okay</option>
+        <option value="😞 Low">😞 Low</option>
+        <option value="😡 Stressed">😡 Stressed</option>
+    </select>
+
+    <label class="section-title">Stress Level: <span id="stressValue">5</span>/10</label>
+    <input type="range" id="stress" min="0" max="10" value="5" oninput="updateLabel('stress')">
+
+    <label class="section-title">Energy Level: <span id="energyValue">5</span>/10</label>
+    <input type="range" id="energy" min="0" max="10" value="5" oninput="updateLabel('energy')">
+
+    <label class="section-title">Sleep Quality: <span id="sleepValue">5</span>/10</label>
+    <input type="range" id="sleep" min="0" max="10" value="5" oninput="updateLabel('sleep')">
+
+    <label class="section-title">Notes (Optional)</label>
+    <textarea id="notes" placeholder="What influenced your mood today?"></textarea>
+
+    <button onclick="saveMood()">Save Mood Entry</button>
+
+
+    <!-- STATS -->
+    <div class="stats-box">
+        <h2>Total Entries</h2>
+        <p id="totalEntries">0</p>
+
+        <div class="stats-top">
+            <div class="stat">
+                <h2 id="avgStress">0</h2>
+                <p>Avg Stress</p>
+            </div>
+
+            <div class="stat">
+                <h2 id="avgEnergy">0</h2>
+                <p>Avg Energy</p>
+            </div>
+
+            <div class="stat">
+                <h2 id="avgSleep">0</h2>
+                <p>Avg Sleep</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// Update slider labels
+function updateLabel(type) {
+    document.getElementById(type + "Value").innerText = document.getElementById(type).value;
+}
+
+function saveMood() {
+    const entry = {
+        date: document.getElementById("moodDate").value,
+        mood: document.getElementById("overallMood").value,
+        stress: Number(document.getElementById("stress").value),
+        energy: Number(document.getElementById("energy").value),
+        sleep: Number(document.getElementById("sleep").value),
+        notes: document.getElementById("notes").value
+    };
+
+    let moods = JSON.parse(localStorage.getItem("cloud7MoodEntries")) || [];
+    moods.push(entry);
+    localStorage.setItem("cloud7MoodEntries", JSON.stringify(moods));
+
+    // Update homepage stats
+    let userData = JSON.parse(localStorage.getItem("cloud7UserData")) || {};
+    userData.mood = entry.mood.split(" ")[0];     
+    userData.moodText = entry.mood.split(" ").slice(1).join(" ");
+    userData.weekProgress = moods.length;
+    localStorage.setItem("cloud7UserData", JSON.stringify(userData));
+
+    alert("Mood saved!");
+    loadStats();
+}
+
+function loadStats() {
+    let moods = JSON.parse(localStorage.getItem("cloud7MoodEntries")) || [];
+
+    document.getElementById("totalEntries").innerText = moods.length;
+
+    if (moods.length === 0) return;
+
+    const avg = (arr) => (arr.reduce((a,b)=>a+b) / arr.length).toFixed(1);
+
+    document.getElementById("avgStress").innerText = avg(moods.map(m => m.stress));
+    document.getElementById("avgEnergy").innerText = avg(m

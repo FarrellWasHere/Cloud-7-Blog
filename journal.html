@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Journal – Cloud 7</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom right, #f3e8ff, #d0f0f0, #ffe6e0);
+        margin: 0;
+        padding: 0;
+    }
+
+    nav {
+        background: #6c5ce7;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+    }
+    nav a {
+        color: white;
+        margin-left: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #6c5ce7;
+        margin-bottom: 10px;
+    }
+
+    .stats {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 0;
+    }
+
+    .stat-box {
+        flex: 1;
+        background: #f8f5ff;
+        margin: 10px;
+        padding: 15px;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    label {
+        display: block;
+        margin-top: 15px;
+        font-weight: bold;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 12px;
+        margin-top: 8px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+    }
+
+    textarea { height: 120px; }
+
+    button {
+        background: #55efc4;
+        border: none;
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 20px;
+        width: 100%;
+        font-size: 1.1rem;
+        cursor: pointer;
+        color: white;
+    }
+
+    #entriesList {
+        margin-top: 30px;
+    }
+
+    .entry-card {
+        background: #f7f7ff;
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 15px;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+    }
+
+    .entry-card h3 {
+        color: #6c5ce7;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+    <div><strong>Cloud 7</strong></div>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="mood.html">Mood</a>
+        <a href="journal.html">Journal</a>
+        <a href="book.html">Book</a>
+        <a href="resources.html">Resources</a>
+        <a href="contact.html">Support</a>
+        <a href="login.html">Login</a>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>My Journal</h1>
+    <p style="text-align:center;">Your private space for thoughts and reflections</p>
+
+    <!-- Stats -->
+    <div class="stats">
+        <div class="stat-box">
+            <h2 id="totalEntries">0</h2>
+            <p>Total Entries</p>
+        </div>
+
+        <div class="stat-box">
+            <h2 id="monthEntries">0</h2>
+            <p>This Month</p>
+        </div>
+
+        <div class="stat-box">
+            <h2 id="privateEntries">0</h2>
+            <p>Private Entries</p>
+        </div>
+    </div>
+
+    <h2 style="margin-top:30px;">New Journal Entry</h2>
+
+    <label>Date</label>
+    <input type="date" id="journalDate">
+
+    <label>Mood Tag</label>
+    <select id="moodTag">
+        <option>💭 Reflective</option>
+        <option>😊 Happy</option>
+        <option>😞 Sad</option>
+        <option>😡 Frustrated</option>
+        <option>😐 Neutral</option>
+    </select>
+
+    <label>Title (Optional)</label>
+    <input type="text" id="journalTitle" placeholder="Give your entry a title...">
+
+    <label>Your Thoughts</label>
+    <textarea id="journalText" placeholder="Write your thoughts, feelings, and reflections..."></textarea>
+
+    <label><input type="checkbox" id="privateToggle"> Keep this entry private</label>
+
+    <button onclick="saveEntry()">Save Entry</button>
+
+    <h2 style="margin-top:40px;">Your Entries</h2>
+    <div id="entriesList"></div>
+
+</div>
+
+<script>
+function saveEntry() {
+    const entry = {
+        date: document.getElementById("journalDate").value,
+        mood: document.getElementById("moodTag").value,
+        title: document.getElementById("journalTitle").value,
+        text: document.getElementById("journalText").value,
+        private: document.getElementById("privateToggle").checked
+    };
+
+    let entries = JSON.parse(localStorage.getItem("cloud7JournalEntries")) || [];
+    entries.push(entry);
+    localStorage.setItem("cloud7JournalEntries", JSON.stringify(entries));
+
+    // Update homepage stats
+    let userData = JSON.parse(localStorage.getItem("cloud7UserData")) || {};
+    userData.journalEntries = entries.length;
+    localStorage.setItem("cloud7UserData", JSON.stringify(userData));
+
+    alert("Entry saved!");
+    loadEntries();
+}
+
+function loadEntries() {
+    let entries = JSON.parse(localStorage.getItem("cloud7JournalEntries")) || [];
+
+    document.getElementById("totalEntries").innerText = entries.length;
+    document.getElementById("privateEntries").innerText = entries.filter(e => e.private).length;
+
+    const currentMonth = new Date().getMonth();
+    document.getElementById("monthEntries").innerText =
+        entries.filter(e => new Date(e.date).getMonth() === currentMonth).length;
+
+    let list = document.getElementById("entriesList");
+    list.innerHTML = "";
+
+    entries.reverse().forEach(entry => {
+        let div = document.createElement("div");
+        div.className = "entry-card";
+
+        div.innerHTML = `
+            <h3>${entry.title || "Untitled Entry"} ${entry.private ? "🔒" : ""}</h3>
+            <p><strong>${entry.date}</strong></p>
+            <p>${entry.mood}</p>
+            <p>${entry.text.substring(0, 150)}...</p>
+        `;
+
+        list.appendChild(div);
+    });
+}
+
+loadEntries();
+</script>
+
+</body>
+</html>
